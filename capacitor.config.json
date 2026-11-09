@@ -1,0 +1,17 @@
+{
+  "appId": "com.sanmarine.escortpro",
+  "appName": "EscortPro",
+  "webDir": "www",
+  "server": {
+    "url": "https://nh-escort-pro.web.app",
+    "cleartext": false,
+    "androidScheme": "https",
+    "allowNavigation": [
+      "nh-escort-pro.web.app",
+      "escort-manager-pro.firebaseapp.com",
+      "*.googleapis.com",
+      "*.gstatic.com"
+    ]
+  },
+  "android": { "allowMixedContent": false, "backgroundColor": "#0a1120" }
+}
