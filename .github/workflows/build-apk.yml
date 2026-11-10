@@ -50,6 +50,15 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npx cap add android
       - run: npx cap sync android
+      - name: SMSI icon
+        run: |
+          for d in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
+            n=${d%%:*}; z=${d##*:}
+            convert -size ${z}x${z} gradient:'#070d1f-#1b2a5c' -gravity center -font DejaVu-Sans-Bold -fill '#facc15' -pointsize $((z*30/100)) -annotate +0-$((z*7/100)) 'SMSI' -fill '#f59e0b' -pointsize $((z*13/100)) -annotate +0+$((z*20/100)) 'NH' android/app/src/main/res/mipmap-$n/ic_launcher.png
+            cp android/app/src/main/res/mipmap-$n/ic_launcher.png android/app/src/main/res/mipmap-$n/ic_launcher_round.png
+            cp android/app/src/main/res/mipmap-$n/ic_launcher.png android/app/src/main/res/mipmap-$n/ic_launcher_foreground.png
+          done
+          rm -rf android/app/src/main/res/mipmap-anydpi-v26
       - name: Build APK
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
       - run: cp android/app/build/outputs/apk/debug/app-debug.apk EscortPro.apk
