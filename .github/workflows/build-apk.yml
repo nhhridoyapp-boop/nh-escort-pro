@@ -50,14 +50,29 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npx cap add android
       - run: npx cap sync android
-      - name: SMSI icon
+      - name: SMSI icon (failure never breaks build)
+        continue-on-error: true
         run: |
-          for d in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
-            n=${d%%:*}; z=${d##*:}
-            convert -size ${z}x${z} gradient:'#070d1f-#1b2a5c' -gravity center -font DejaVu-Sans-Bold -fill '#facc15' -pointsize $((z*30/100)) -annotate +0-$((z*7/100)) 'SMSI' -fill '#f59e0b' -pointsize $((z*13/100)) -annotate +0+$((z*20/100)) 'NH' android/app/src/main/res/mipmap-$n/ic_launcher.png
-            cp android/app/src/main/res/mipmap-$n/ic_launcher.png android/app/src/main/res/mipmap-$n/ic_launcher_round.png
-            cp android/app/src/main/res/mipmap-$n/ic_launcher.png android/app/src/main/res/mipmap-$n/ic_launcher_foreground.png
-          done
+          pip install pillow --break-system-packages -q || pip install pillow -q
+          python3 - <<'PY'
+          from PIL import Image, ImageDraw, ImageFont
+          import glob, os
+          F='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+          sizes={'mdpi':48,'hdpi':72,'xhdpi':96,'xxhdpi':144,'xxxhdpi':192}
+          for n,z in sizes.items():
+              d='android/app/src/main/res/mipmap-'+n
+              if not os.path.isdir(d): continue
+              im=Image.new('RGB',(z,z))
+              dr=ImageDraw.Draw(im)
+              for y in range(z):
+                  t=y/z; dr.line([(0,y),(z,y)],fill=(int(7+20*t),int(13+25*t),int(31+60*t)))
+              f=ImageFont.truetype(F,int(z*.27))
+              w=dr.textlength('SMSI',font=f); dr.text(((z-w)/2,z*.22),'SMSI',font=f,fill=(250,204,21))
+              f2=ImageFont.truetype(F,int(z*.13))
+              w2=dr.textlength('NH',font=f2); dr.text(((z-w2)/2,z*.6),'NH',font=f2,fill=(245,158,11))
+              for name in ('ic_launcher.png','ic_launcher_round.png','ic_launcher_foreground.png'):
+                  im.save(d+'/'+name)
+          PY
           rm -rf android/app/src/main/res/mipmap-anydpi-v26
       - name: Build APK
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug --no-daemon
