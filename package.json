@@ -1,14 +1,22 @@
 {
   "name": "escortpro-android",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "EscortPro Android wrapper (Capacitor) — loads https://nh-escort-pro.web.app",
-  "dependencies": {
-    "@capacitor/android": "^6.1.2",
-    "@capacitor/cli": "^6.1.2",
-    "@capacitor/core": "^6.1.2"
+  "description": "EscortPro Android app (Capacitor) — NH, full native mode",
+  "scripts": {
+    "setup": "npm install && npx cap add android && npx @capacitor/assets generate --android --iconBackgroundColor '#0b1b3a' --splashBackgroundColor '#061427' && node scripts/patch-android.js && npx cap sync android",
+    "apk": "cd android && ./gradlew assembleDebug"
   },
-  "devDependencies": {
-    "@capacitor/assets": "^3.0.5"
-  }
+  "dependencies": {
+    "@capacitor/android": "6.1.2",
+    "@capacitor/app": "6.0.1",
+    "@capacitor/cli": "6.1.2",
+    "@capacitor/core": "6.1.2",
+    "@capacitor/filesystem": "6.0.1",
+    "@capacitor/keyboard": "6.0.2",
+    "@capacitor/share": "6.0.2",
+    "@capacitor/splash-screen": "6.0.2",
+    "@capacitor/status-bar": "6.0.1"
+  },
+  "devDependencies": { "@capacitor/assets": "3.0.5" }
 }

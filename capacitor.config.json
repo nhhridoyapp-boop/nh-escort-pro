@@ -6,12 +6,12 @@
     "url": "https://nh-escort-pro.web.app",
     "cleartext": false,
     "androidScheme": "https",
-    "allowNavigation": [
-      "nh-escort-pro.web.app",
-      "escort-manager-pro.firebaseapp.com",
-      "*.googleapis.com",
-      "*.gstatic.com"
-    ]
+    "allowNavigation": ["nh-escort-pro.web.app", "escort-manager-pro.firebaseapp.com", "*.googleapis.com", "*.gstatic.com", "*.firebaseio.com", "*.cloudfunctions.net"]
   },
-  "android": { "allowMixedContent": false, "backgroundColor": "#0a1120" }
+  "android": { "allowMixedContent": false, "backgroundColor": "#061427" },
+  "plugins": {
+    "SplashScreen": { "launchShowDuration": 1200, "backgroundColor": "#061427", "androidScaleType": "CENTER_INSIDE", "showSpinner": false },
+    "StatusBar": { "style": "DARK", "backgroundColor": "#061427", "overlaysWebView": false },
+    "Keyboard": { "resize": "body", "resizeOnFullScreen": true }
+  }
 }
